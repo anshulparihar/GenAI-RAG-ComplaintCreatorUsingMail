@@ -1,4 +1,7 @@
 .venv
 .env
-*.txt
-*.json
+notes.txt
+token.json
+credentials.json
+.json
+runClaude.txt

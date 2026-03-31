@@ -1,13 +1,34 @@
-from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime
+from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime, Boolean, JSON
 from sqlalchemy.orm import declarative_base
 from datetime import datetime
 
 Base = declarative_base()
 
+class PendingEmail(Base):
+    __tablename__ = "pending_emails"
+
+    id              = Column(Integer, primary_key=True, autoincrement=True)
+    email_id        = Column(String, unique=True, nullable=False)  # Gmail message ID
+    sender          = Column(String)
+    recipient       = Column(String)
+    subject         = Column(String)
+    body_snippet    = Column(Text)
+    email_date      = Column(String)
+    fetched_at      = Column(String)
+    is_complaint    = Column(Integer, default=0)  # LLM classification
+    classification  = Column(JSON)  # Full LLM classification data
+    is_reviewed     = Column(Boolean, default=False)  # User has reviewed?
+    complaint_id    = Column(String, nullable=True)  # Set when complaint is created
+    created_at      = Column(String, default=lambda:
+                                datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                            )
+
+
 class Complaint(Base):
     __tablename__ = "complaints"
 
-    id              = Column(Integer, primary_key=True, autoincrement=True)    
+    id              = Column(Integer, primary_key=True, autoincrement=True)
+    complaint_id    = Column(String, unique=True, nullable=False)
     email_id        = Column(String, unique=True, nullable=False)
     email_date      = Column(String, nullable=False)
     fetched_at      = Column(String, nullable=False)

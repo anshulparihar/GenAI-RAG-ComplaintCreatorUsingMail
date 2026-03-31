@@ -15,4 +15,4 @@ app.add_middleware(
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
-app.include_router(mail_retrieve_route, prefix="/api")
+app.include_router(mail_retrieve_route)
